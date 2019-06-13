@@ -1,6 +1,7 @@
 #include "./Monitor.h"
 
 void initMonitor(Monitor *monitor, int bufferLen) {
+    monitor = (Monitor*)malloc(sizeof(Monitor));
     monitor->n = bufferLen;
     monitor->current = 0;
     monitor->buffer = (float**)malloc(sizeof(float*) * bufferLen);
@@ -14,8 +15,6 @@ void initMonitor(Monitor *monitor, int bufferLen) {
     pthread_mutex_init(&monitor->mutex, NULL);
     pthread_mutex_init(&monitor->full, NULL);
     pthread_mutex_init(&monitor->empty, NULL);
-
-    pthread_cond_wait(&monitor->full_cond, &monitor->full);
 }
 
 float *readBuffer(Monitor *monitor) {

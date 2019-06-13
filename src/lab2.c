@@ -30,7 +30,7 @@ int main (int argc, char * argv[]) {
     char *output = NULL;
     int **descriptors = NULL;
 
-    while ((c = getopt(argc, argv, "i:o:d:n:b:s")) != -1) {
+    while ((c = getopt(argc, argv, "i:o:d:n:bs:")) != -1) {
         switch (c) {
             case 'i':
                 input = (char*) malloc(30 * sizeof(char));

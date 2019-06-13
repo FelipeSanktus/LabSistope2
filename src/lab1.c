@@ -4,14 +4,9 @@
 #include <string.h>
 #include <math.h>
 #include "./../constants.h"
+#include "./structs/Monitor.h"
+#include "./structs/Results.h"
 
-void parseLine(char *line, char *param1, char *param2) {
-    char *token = strtok(line,",");
-    strcpy(param1, token);
-    token = strtok(NULL,",");
-    strcpy(param2, token);
-    return;
-}
 
 int main(int argc, char * argv[]) {
     int c, i;
@@ -46,37 +41,15 @@ int main(int argc, char * argv[]) {
         }
     }
 
-    descriptors = (int**)malloc((2*n)*sizeof(int*));
-    childs = (int*)malloc(n*sizeof(int));
+    Results *Resultados = (Results *)malloc(sizeof(Results)*n);
+    int i;
+    int hilos[n];
+    for(i=0;i<n;i++){
+        initResults(&Resultados[i],i);
 
-    for (i=0; i<2*n; i++) {
-        int *fd= (int*)malloc(2*sizeof(int));
-        if (pipe(fd) == -1) {
-            perror("No se pudo crear el pipe\n");
-            exit(ERROR);
-        }
-        descriptors[i] = fd;
     }
 
-    ppid = getpid();
-    for (i=0; i<n; i++) {
-        if (ppid == getpid()) {
-            if (fork() == 0) {
-                int pidhijo = getpid();
-                childs[i] = pidhijo;
-                int forRead = descriptors[2*i][0];
-                int forWrite = descriptors[2*i+1][1];
-                char *bufferRead = (char*)malloc(50*sizeof(char));
-                char *bufferWrite = (char*)malloc(50*sizeof(char));
-                sprintf(bufferRead,"%i",forRead);
-                sprintf(bufferWrite,"%i",forWrite);
-                char *newargv[] = {"./functions.out",bufferRead,bufferWrite,NULL};
-
-                execvp(newargv[0],newargv);
-            }
-        }
-    }
-
+	
     if (ppid == getpid()) {
         char *reader = (char*)malloc(sizeof(char));
         char* linereader = (char*)malloc(sizeof(char)*100);

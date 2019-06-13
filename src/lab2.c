@@ -72,7 +72,6 @@ int main(int argc, char * argv[]) {
                     char *procesLine[2];
                     procesLine[0] = (char*)malloc(50 * sizeof(char));
                     procesLine[1] = (char*)malloc(50 * sizeof(char));
-                    parseLine(linereader, procesLine[0], procesLine[1]);
 
                     float pointU = atof(procesLine[0]);
                     float pointV = atof(procesLine[1]);

@@ -81,6 +81,7 @@ int main(int argc, char * argv[]) {
                 exit(ERROR);
             }
 
+
             if ((*reader == '\n' || *reader == EOF) && (int)strlen(linereader) > 1) {
                 char *aux = (char*)malloc(sizeof(char)*100);
                 strcpy(aux,linereader);
@@ -111,6 +112,7 @@ int main(int argc, char * argv[]) {
                         writeBuffer(Resultados[i]->monitor,visibilidades)
                     } else if (radio >= n * radius && i == n-1) {
                         writeBuffer(Resultados[n-1],visibilidades);
+
                     }
                 }
 

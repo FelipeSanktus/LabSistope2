@@ -1,25 +1,22 @@
 DIR_OUTPUT = ./bin
 DIR_SRC = ./src
 NAME_EXE_1 = lab2
-NAME_EXE_2 = functions
+HEADERS = src/functions.h src/structs/Monitor.h src/structs/Results.h
+SOURCE_FILES = src/functions.c src/structs/Monitor.c src/structs/Results.c
 
-all: release
+
+all: $(DIR_SRC)/lab2.c $(HEADERS)
+	gcc $(DIR_SRC)/lab2.c -o $(DIR_OUTPUT)/$(NAME_EXE_1).out $(SOURCE_FILES) -lm -O2
+	mkdir -p $(DIR_OUTPUT)
 
 run:
-#	$(DIR_OUTPUT)/$(NAME_EXE_1).out
-	$(DIR_OUTPUT)/$(NAME_EXE_1).out -i test_files/visibilidades.csv -o propiedades.txt -d 20 -n 4 -b
-
-release:
-	mkdir -p $(DIR_OUTPUT)
-	gcc $(DIR_SRC)/lab1.c -o $(DIR_OUTPUT)/$(NAME_EXE_1).out -lm -O2
-	gcc $(DIR_SRC)/Vis.c -o $(NAME_EXE_2).out -lm -O2
+	$(DIR_OUTPUT)/$(NAME_EXE_1).out -i test_files/test.csv -o propiedades.txt -d 20 -n 4 -s 3 -b
 
 debug:
 	mkdir -p $(DIR_OUTPUT)
-	gcc $(DIR_SRC)/lab1.c -o $(DIR_OUTPUT)/$(NAME_EXE_1) -lm -g3 -Wall -pedantic -DDEBUG
-	gcc $(DIR_SRC)/Vis.c -o $(DIR_OUTPUT)/$(NAME_EXE_2) -lm -g3 -Wall -pedantic -DDEBUG
+	$(DIR_SRC)/lab2.c $(DIR_OUTPUT)/$(NAME_EXE_1).out $(HEADERS)
+	gcc $(DIR_SRC)/lab2.c -o $(DIR_OUTPUT)/$(NAME_EXE_1).out $(SOURCE_FILES) -lm -g3 -Wall -pedantic -DDEBUG
 
 clean:
 	rm -rf $(DIR_OUTPUT)
-	rm $(NAME_EXE_2).out
 

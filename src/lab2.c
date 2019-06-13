@@ -6,8 +6,7 @@
 #include "./../constants.h"
 #include "./structs/Monitor.h"
 #include "./structs/Results.h"
-#include "/functions.h"
-
+#include "./functions.h"
 
 
 void parseLine(char *line, char *param1, char *param2) {
@@ -19,9 +18,7 @@ void parseLine(char *line, char *param1, char *param2) {
 }
 
 
-
-
-int main(int argc, char * argv[]) {
+int main (int argc, char * argv[]) {
     int c, i;
     int n = 0;
     int s = 0;
@@ -60,14 +57,13 @@ int main(int argc, char * argv[]) {
 
     Results **Resultados = (Results **)malloc(sizeof(Results *)*n);
     int rc;
-    int hilos[n];
-    for(i=0;i<n;i++){
-        initResults(Resultados[i],i,s);
-        rc = pthread_create(&hilos[i],NULL,bufferConsume,(void *) Resultados[i])
-        
+    pthread_t hilos[n];
+    for (i=0; i < n; i++) {
+        initResults(Resultados[i], i, s);
+        rc = pthread_create(&hilos[i], NULL, bufferConsume, (void *) Resultados[i]);
     }
 
-    
+
     char *reader = (char*)malloc(sizeof(char));
     char* linereader = (char*)malloc(sizeof(char)*100);
     FILE *file = fopen(input, "r");
@@ -80,7 +76,6 @@ int main(int argc, char * argv[]) {
                 printf("Error al leer archivo\n");
                 exit(ERROR);
             }
-
 
             if ((*reader == '\n' || *reader == EOF) && (int)strlen(linereader) > 1) {
                 char *aux = (char*)malloc(sizeof(char)*100);
@@ -100,25 +95,27 @@ int main(int argc, char * argv[]) {
                 token = strtok(NULL,",");
                 visibilidades[2] = atof(token);
 
+                printf("visibilidades: %f, %f, %f", visibilidades[0], visibilidades[1], visibilidades[2]);
+
                 float pointU = atof(procesLine[0]);
                 float pointV = atof(procesLine[1]);
-                float radio = sqrtf((pointU*pointU+pointV*pointV));
+                float radio = sqrtf((pointU*pointU + pointV*pointV));
 
                 for (int i=0; i<n; i++) {
                     float min = i*radius;
-                    float max = (i+1)*radius;
+                    float max = (i+1) * radius;
 
                     if (radio >= min && radio < max) {
-                        writeBuffer(Resultados[i]->monitor,visibilidades)
+                        writeBuffer(Resultados[i]->monitor, visibilidades);
                     } else if (radio >= n * radius && i == n-1) {
-                        writeBuffer(Resultados[n-1],visibilidades);
+                        writeBuffer(Resultados[n-1]->monitor, visibilidades);
 
                     }
                 }
 
                 free(linereader);
                 linereader = NULL;
-                linereader = (char*)malloc(100*sizeof(char));
+                linereader = (char*)malloc(100 * sizeof(char));
                 strcpy(linereader, "");
             } else {
                 strcat(linereader, reader);
@@ -130,7 +127,6 @@ int main(int argc, char * argv[]) {
         perror(input);
         exit(ERROR);
     }
-
 
     ///escribe en el archivo
     /* 
@@ -183,5 +179,4 @@ int main(int argc, char * argv[]) {
     */
 
     return OK;
-    
 }

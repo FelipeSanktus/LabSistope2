@@ -14,7 +14,7 @@ typedef struct Results {
     Monitor *monitor;
 } Results;
 
-void initResults(Results *results, int i, int n);
+Results *initResults(int i, int n);
 
 void destroyResults(Results *results);
 

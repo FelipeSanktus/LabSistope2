@@ -59,7 +59,7 @@ int main (int argc, char * argv[]) {
     int rc;
     pthread_t hilos[n];
     for (i=0; i < n; i++) {
-        initResults(Resultados[i], i, s);
+        Resultados[i] = initResults(i, s);
         rc = pthread_create(&hilos[i], NULL, bufferConsume, (void *) Resultados[i]);
     }
 
@@ -81,7 +81,7 @@ int main (int argc, char * argv[]) {
                 char *aux = (char*)malloc(sizeof(char)*100);
                 strcpy(aux,linereader);
                 char **procesLine = malloc(sizeof(char *)*2);
-                float *visibilidades = malloc(sizeof(float )*2);
+                float *visibilidades = (float *)malloc(sizeof(float) * 3);
                 procesLine[0] = (char*)malloc(50 * sizeof(char));
                 procesLine[1] = (char*)malloc(50 * sizeof(char));
                 char *token = strtok(aux,",");
@@ -95,8 +95,6 @@ int main (int argc, char * argv[]) {
                 token = strtok(NULL,",");
                 visibilidades[2] = atof(token);
 
-                printf("visibilidades: %f, %f, %f", visibilidades[0], visibilidades[1], visibilidades[2]);
-
                 float pointU = atof(procesLine[0]);
                 float pointV = atof(procesLine[1]);
                 float radio = sqrtf((pointU*pointU + pointV*pointV));
@@ -109,7 +107,6 @@ int main (int argc, char * argv[]) {
                         writeBuffer(Resultados[i]->monitor, visibilidades);
                     } else if (radio >= n * radius && i == n-1) {
                         writeBuffer(Resultados[n-1]->monitor, visibilidades);
-
                     }
                 }
 

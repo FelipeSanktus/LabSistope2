@@ -1,8 +1,8 @@
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-#include <math.h>
 #include "./../constants.h"
 #include "./structs/Monitor.h"
 #include "./structs/Results.h"
@@ -11,6 +11,7 @@
 int main(int argc, char * argv[]) {
     int c, i;
     int n = 0;
+    int s = 0;
     int ppid = 0;
     int radius = 0;
     int show = FALSE;
@@ -35,6 +36,9 @@ int main(int argc, char * argv[]) {
             case 'n':
                 n = atoi(optarg);
                 break;
+            case 's':
+                s = atoi(optarg);
+                break;
             case 'b':
                 show = TRUE;
                 break;
@@ -42,14 +46,12 @@ int main(int argc, char * argv[]) {
     }
 
     Results *Resultados = (Results *)malloc(sizeof(Results)*n);
-    int i;
     int hilos[n];
     for(i=0;i<n;i++){
-        initResults(&Resultados[i],i);
+        initResults(&Resultados[i],i, n);
 
     }
 
-	
     if (ppid == getpid()) {
         char *reader = (char*)malloc(sizeof(char));
         char* linereader = (char*)malloc(sizeof(char)*100);
